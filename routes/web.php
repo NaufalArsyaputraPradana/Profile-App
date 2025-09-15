@@ -7,7 +7,6 @@ use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\HeroSectionController;
 use App\Http\Controllers\Admin\AboutSectionController;
 use App\Http\Controllers\Admin\ContactSectionController;
-use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +24,7 @@ Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 
 // Authentication Routes
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Profile routes will be added later when ProfileController is created
 });
 
 require __DIR__.'/auth.php';

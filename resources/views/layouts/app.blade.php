@@ -17,6 +17,7 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -30,6 +31,11 @@
                         secondary: '#475569',
                         dark: '#0f172a',
                     },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient': 'gradient 15s ease infinite',
+                        'typewriter': 'typewriter 3s steps(30) 1s 1 normal both, blinkCursor 500ms steps(30) infinite normal',
+                    }
                 }
             }
         }
@@ -120,37 +126,6 @@
         .goog-te-gadget .goog-te-combo {
             margin: 0 !important;
         }
-
-        /* Dropdown Animation */
-        @keyframes dropdownEnter {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        @keyframes dropdownLeave {
-            from {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: scale(0.95) translateY(-10px);
-            }
-        }
-
-        .dropdown-enter {
-            animation: dropdownEnter 0.2s ease-out;
-        }
-
-        .dropdown-leave {
-            animation: dropdownLeave 0.15s ease-in forwards;
-        }
     </style>
 
     @stack('styles')
@@ -181,27 +156,9 @@
                         Kontak
                     </a>
 
-                    <!-- Language Switcher -->
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-                            <i class="fas fa-globe text-primary"></i>
-                            <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">
-                                <span class="hidden md:inline">Bahasa</span>
-                            </span>
-                            <i class="fas fa-chevron-down text-xs text-gray-500 dark:text-gray-400"></i>
-                        </button>
-                        
-                        <div x-show="open" 
-                             @click.away="open = false"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 transform scale-95"
-                             x-transition:enter-end="opacity-100 transform scale-100"
-                             x-transition:leave="transition ease-in duration-75"
-                             x-transition:leave-start="opacity-100 transform scale-100"
-                             x-transition:leave-end="opacity-0 transform scale-95"
-                             class="absolute right-0 mt-2 py-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700">
-                            <div id="google_translate_element" class="px-4 py-2"></div>
-                        </div>
+                    <!-- Language Selector -->
+                    <div class="relative">
+                        <div id="google_translate_element" class="w-32"></div>
                     </div>
 
                     <!-- Dark Mode Toggle -->
@@ -278,7 +235,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="min-h-screen">
+    <main class="min-h-screen pt-20">
         @yield('content')
     </main>
 
@@ -321,79 +278,76 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Initialize AOS -->
+    <script>
+        window.addEventListener('load', function() {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    easing: 'ease-in-out',
+                    once: true,
+                    offset: 100
+                });
+            }
+        });
+    </script>
+    
+    <!-- Google Translate -->
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'id',
                 includedLanguages: 'en,id',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false,
-                multilanguagePage: true
+                autoDisplay: false
             }, 'google_translate_element');
 
-            // Initialize mobile translate element
             new google.translate.TranslateElement({
                 pageLanguage: 'id',
                 includedLanguages: 'en,id',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false,
-                multilanguagePage: true
+                autoDisplay: false
             }, 'google_translate_element_mobile');
         }
 
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
-        });
-
         // Dark mode functionality
-        const themeToggle = document.getElementById('theme-toggle');
-        
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
-
-        themeToggle.addEventListener('click', function() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.theme = isDark ? 'dark' : 'light';
-        });
-
-        // Mobile Menu Toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
-                mobileMenu.classList.add('hidden');
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
             }
-        });
 
-        // Cookie for language preference
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    const isDark = document.documentElement.classList.toggle('dark');
+                    localStorage.theme = isDark ? 'dark' : 'light';
+                });
+            }
 
-        // Set language on page load
-        window.addEventListener('load', function() {
-            const savedLang = getCookie('googtrans');
-            if (!savedLang) {
-                document.cookie = 'googtrans=/id/id';
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
             }
         });
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('scripts')
 </body>
 </html>
