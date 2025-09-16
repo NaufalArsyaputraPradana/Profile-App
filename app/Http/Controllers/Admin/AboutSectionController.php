@@ -25,7 +25,7 @@ class AboutSectionController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'description' => 'required',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096',
             'age' => 'required|integer|min:1',
             'email' => 'required|email',
             'phone' => 'nullable|max:255',
@@ -64,7 +64,7 @@ class AboutSectionController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:255',
             'description' => 'required',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096',
             'age' => 'required|integer|min:1',
             'email' => 'required|email',
             'phone' => 'nullable|max:255',

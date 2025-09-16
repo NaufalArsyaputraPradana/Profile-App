@@ -54,6 +54,24 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('admin.hero.index') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg {{ request()->routeIs('admin.hero.*') ? 'bg-gray-100' : '' }}">
+                            <i class="fas fa-star w-6"></i>
+                            <span>Hero Sections</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.about.index') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg {{ request()->routeIs('admin.about.*') ? 'bg-gray-100' : '' }}">
+                            <i class="fas fa-user w-6"></i>
+                            <span>About Sections</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.contact.index') }}" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg {{ request()->routeIs('admin.contact.*') ? 'bg-gray-100' : '' }}">
+                            <i class="fas fa-envelope w-6"></i>
+                            <span>Contact Sections</span>
+                        </a>
+                    </li>
+                    <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg w-full">
