@@ -6,6 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - {{ config('app.name', 'Portfolio') }}</title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('icon/logo.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('icon/logo.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('icon/logo.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icon/logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('icon/logo.png') }}">
+    
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -54,77 +61,123 @@
                         center/cover no-repeat;
         }
 
-        /* Google Translate Styling */
-        .goog-te-combo {
-            width: 100%;
-            padding: 0.625rem;
-            border-radius: 0.5rem;
-            border: 2px solid #e5e7eb;
-            background-color: white;
-            color: #374151;
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-            outline: none;
+        /* Google Translate Language Selector Styling */
+        .language-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            font-family: 'Poppins', sans-serif;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        .language-toggle:hover {
+            border-color: #2563eb;
+            box-shadow: 0 4px 12px 0 rgba(37, 99, 235, 0.15), 0 2px 4px 0 rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .dark .language-toggle {
+            background-color: rgba(31, 41, 55, 0.95);
+            border-color: #4b5563;
+        }
+
+        .dark .language-toggle:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px 0 rgba(59, 130, 246, 0.25), 0 2px 4px 0 rgba(59, 130, 246, 0.15);
+        }
+
+        .flag-toggle {
+            vertical-align: middle;
+            font-size: 0;
+            padding: 2px;
             background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 1rem;
-            padding-right: 2.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease-in-out;
+            display: inline-block;
+            position: relative;
+            width: 24px;
+            height: 18px;
         }
 
-        .goog-te-combo:hover {
-            border-color: #2563eb;
+        .flag-toggle canvas {
+            border: 0;
+            width: 20px;
+            height: 15px;
+            border-radius: 2px;
         }
 
-        .goog-te-combo:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        .flag-toggle:hover {
+            transform: scale(1.05);
         }
 
-        /* Dark Mode Styles */
-        .dark .goog-te-combo {
-            background-color: #1f2937;
-            border-color: #374151;
+        .language-text {
+            font-size: 0.875rem;
+            color: #374151;
+            font-weight: 500;
+            min-width: 60px;
+            text-align: left;
+        }
+
+        .dark .language-text {
             color: #e5e7eb;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
         }
 
-        .dark .goog-te-combo:hover {
-            border-color: #2563eb;
+        /* Language Selector Container */
+        .language-selector {
+            position: relative;
+            display: flex;
+            align-items: center;
         }
 
-        .dark .goog-te-combo option {
-            background-color: #1f2937;
-            color: #e5e7eb;
+        /* Enhanced Mobile Styles */
+        @media (max-width: 768px) {
+            .language-toggle {
+                gap: 0.25rem;
+                padding: 0.375rem 0.5rem;
+            }
+            
+            .flag-toggle canvas {
+                width: 18px;
+                height: 13px;
+            }
+            
+            .language-text {
+                font-size: 0.8rem;
+                min-width: 50px;
+            }
         }
 
-        /* Hide Google Translate Elements */
+        /* Hide Google Translate UI Elements */
         .goog-te-banner-frame,
         .goog-te-gadget img,
-        .VIpgJd-ZVi9od-l4eHX-hSRGPd,
-        .VIpgJd-ZVi9od-l4eHX-hSRGPd:link,
-        .VIpgJd-ZVi9od-l4eHX-hSRGPd:visited,
-        .VIpgJd-ZVi9od-l4eHX-hSRGPd:hover,
-        .VIpgJd-ZVi9od-l4eHX-hSRGPd:active {
+        .goog-te-gadget span,
+        .goog-te-gadget a,
+        .goog-tooltip,
+        #goog-gt-tt,
+        #google_translate_element2 {
             display: none !important;
         }
 
         body {
             top: 0 !important;
+            position: static !important;
         }
 
-        .goog-te-gadget {
-            color: transparent !important;
-            font-family: 'Poppins', sans-serif !important;
+        /* Navbar Translation Adjustment */
+        .navbar-translated {
+            top: 40px !important;
+            transition: top 0.3s ease-in-out;
         }
 
-        .goog-te-gadget .goog-te-combo {
-            margin: 0 !important;
+        .navbar-normal {
+            top: 0px !important;
+            transition: top 0.3s ease-in-out;
         }
     </style>
 
@@ -132,7 +185,7 @@
 </head>
 <body class="bg-white dark:bg-dark antialiased">
     <!-- Navbar -->
-    <nav class="fixed w-full bg-white bg-opacity-70 backdrop-blur-md dark:bg-dark dark:bg-opacity-70 z-50">
+    <nav class="fixed w-full bg-white bg-opacity-70 backdrop-blur-md dark:bg-dark dark:bg-opacity-70 z-50 transition-all duration-300" id="main-navbar">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <a href="{{ route('home') }}" class="text-2xl font-bold text-primary">
@@ -157,8 +210,14 @@
                     </a>
 
                     <!-- Language Selector -->
-                    <div class="relative">
-                        <div id="google_translate_element" class="w-32"></div>
+                    <div class="relative language-selector">
+                        <div class="language-toggle" id="language-toggle">
+                            <span class="flag-toggle" id="flag-display">
+                                <canvas id="flagCanvas" width="20" height="15"></canvas>
+                            </span>
+                            <span class="language-text" id="language-text">Indonesia</span>
+                        </div>
+                        <div id="google_translate_element2"></div>
                     </div>
 
                     <!-- Dark Mode Toggle -->
@@ -211,7 +270,15 @@
                     <a href="{{ route('contact') }}" class="text-gray-600 hover:text-primary dark:text-gray-300">
                         Kontak
                     </a>
-                    <div id="google_translate_element_mobile" class="py-2"></div>
+                    <div class="language-selector py-2">
+                        <div class="language-toggle" id="language-toggle-mobile">
+                            <span class="flag-toggle" id="flag-display-mobile">
+                                <canvas id="flagCanvasMobile" width="18" height="13"></canvas>
+                            </span>
+                            <span class="language-text" id="language-text-mobile">Indonesia</span>
+                        </div>
+                        <div id="google_translate_element_mobile2"></div>
+                    </div>
                     @guest
                         <a href="{{ route('login') }}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700 inline-block text-center">
                             Login
@@ -297,30 +364,223 @@
     
     <!-- Google Translate -->
     <script type="text/javascript">
-        function googleTranslateElementInit() {
+        // Language state
+        let currentLanguage = 'id'; // Default to Indonesian display
+        let isTranslated = false; // Track if translation is active
+        
+        function googleTranslateElementInit2() {
             new google.translate.TranslateElement({
                 pageLanguage: 'id',
-                includedLanguages: 'en,id',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false
-            }, 'google_translate_element');
-
+            }, 'google_translate_element2');
+            
             new google.translate.TranslateElement({
                 pageLanguage: 'id',
-                includedLanguages: 'en,id',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false
-            }, 'google_translate_element_mobile');
+            }, 'google_translate_element_mobile2');
         }
 
-        // Dark mode functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const themeToggle = document.getElementById('theme-toggle');
+        function toggleLanguage() {
+            if (currentLanguage === 'id') {
+                // Switch to English (activate translation)
+                doGTranslate('id|en');
+                updateLanguageDisplay('en');
+                currentLanguage = 'en';
+                isTranslated = true;
+                adjustNavbarPosition(true);
+            } else {
+                // Switch back to Indonesian (deactivate translation)
+                doGTranslate('en|id');
+                updateLanguageDisplay('id');
+                currentLanguage = 'id';
+                isTranslated = false;
+                adjustNavbarPosition(false);
+            }
+        }
+
+        function adjustNavbarPosition(isTranslated) {
+            const navbar = document.getElementById('main-navbar');
+            if (navbar) {
+                if (isTranslated) {
+                    navbar.classList.add('navbar-translated');
+                    navbar.classList.remove('navbar-normal');
+                    document.querySelector('main').style.paddingTop = '6rem';
+                } else {
+                    navbar.classList.add('navbar-normal');
+                    navbar.classList.remove('navbar-translated');
+                    document.querySelector('main').style.paddingTop = '5rem';
+                }
+            }
+        }
+
+        function updateLanguageDisplay(lang) {
+            if (lang === 'id') {
+                drawIndonesianFlag('flagCanvas');
+                drawIndonesianFlag('flagCanvasMobile');
+                document.getElementById('language-text').textContent = 'Indonesia';
+                document.getElementById('language-text-mobile').textContent = 'Indonesia';
+            } else {
+                drawEnglishFlag('flagCanvas');
+                drawEnglishFlag('flagCanvasMobile');
+                document.getElementById('language-text').textContent = 'English';
+                document.getElementById('language-text-mobile').textContent = 'English';
+            }
+        }
+
+        function drawIndonesianFlag(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
             
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Merah di atas
+            ctx.fillStyle = '#FF0000';
+            ctx.fillRect(0, 0, width, height / 2);
+
+            // Putih di bawah
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, height / 2, width, height / 2);
+
+            // Border
+            ctx.strokeStyle = '#cccccc';
+            ctx.lineWidth = 0.5;
+            ctx.strokeRect(0, 0, width, height);
+        }
+
+        function drawEnglishFlag(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Background biru
+            ctx.fillStyle = '#012169';
+            ctx.fillRect(0, 0, width, height);
+
+            // Garis putih diagonal
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = width * 0.1;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(width, height);
+            ctx.moveTo(width, 0);
+            ctx.lineTo(0, height);
+            ctx.stroke();
+
+            // Garis merah diagonal
+            ctx.strokeStyle = '#C8102E';
+            ctx.lineWidth = width * 0.06;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(width, height);
+            ctx.moveTo(width, 0);
+            ctx.lineTo(0, height);
+            ctx.stroke();
+
+            // Garis putih horizontal dan vertikal
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = height * 0.2;
+            ctx.beginPath();
+            ctx.moveTo(0, height / 2);
+            ctx.lineTo(width, height / 2);
+            ctx.stroke();
+
+            ctx.lineWidth = width * 0.12;
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2, height);
+            ctx.stroke();
+
+            // Garis merah horizontal dan vertikal
+            ctx.strokeStyle = '#C8102E';
+            ctx.lineWidth = height * 0.12;
+            ctx.beginPath();
+            ctx.moveTo(0, height / 2);
+            ctx.lineTo(width, height / 2);
+            ctx.stroke();
+
+            ctx.lineWidth = width * 0.07;
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2, height);
+            ctx.stroke();
+
+            // Border
+            ctx.strokeStyle = '#cccccc';
+            ctx.lineWidth = 0.5;
+            ctx.strokeRect(0, 0, width, height);
+        }
+
+        function doGTranslate(lang_pair) {
+            if (lang_pair.value) lang_pair = lang_pair.value;
+            if (lang_pair == '') return;
+            
+            var lang = lang_pair.split('|')[1];
+            var teCombo;
+            var sel = document.getElementsByTagName('select');
+            
+            for (var i = 0; i < sel.length; i++) {
+                if (/goog-te-combo/.test(sel[i].className)) {
+                    teCombo = sel[i];
+                    break;
+                }
+            }
+            
+            if (document.getElementById('google_translate_element2') == null || 
+                document.getElementById('google_translate_element2').innerHTML.length == 0 || 
+                !teCombo || teCombo.length == 0 || teCombo.innerHTML.length == 0) {
+                setTimeout(function () {
+                    doGTranslate(lang_pair)
+                }, 500);
+            } else {
+                teCombo.value = lang;
+                GTranslateFireEvent(teCombo, 'change');
+                GTranslateFireEvent(teCombo, 'change');
+                
+                setTimeout(function() {
+                    checkGoogleTranslateBanner();
+                }, 1000);
+            }
+        }
+
+        function checkGoogleTranslateBanner() {
+            if (currentLanguage === 'en' && isTranslated) {
+                adjustNavbarPosition(true);
+            } else {
+                adjustNavbarPosition(false);
+            }
+            
+            setTimeout(checkGoogleTranslateBanner, 1000);
+        }
+
+        function GTranslateFireEvent(element, event) {
+            try {
+                if (document.createEvent) {
+                    var evt = document.createEvent('HTMLEvents');
+                    evt.initEvent(event, true, true);
+                    element.dispatchEvent(evt);
+                } else {
+                    var evt = document.createEventObject();
+                    element.fireEvent('on' + event, evt);
+                }
+            } catch (e) {}
+        }
+
+        // Dark mode and initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark mode functionality
+            const themeToggle = document.getElementById('theme-toggle');
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
             }
-
             if (themeToggle) {
                 themeToggle.addEventListener('click', function() {
                     const isDark = document.documentElement.classList.toggle('dark');
@@ -328,16 +588,28 @@
                 });
             }
 
-            // Mobile Menu Toggle
+            // Initialize Indonesian flags
+            setTimeout(function() {
+                drawIndonesianFlag('flagCanvas');
+                drawIndonesianFlag('flagCanvasMobile');
+            }, 100);
+
+            // Language toggle event listeners
+            const languageToggle = document.getElementById('language-toggle');
+            const languageToggleMobile = document.getElementById('language-toggle-mobile');
+            if (languageToggle) languageToggle.addEventListener('click', toggleLanguage);
+            if (languageToggleMobile) languageToggleMobile.addEventListener('click', toggleLanguage);
+
+            // Start monitoring Google Translate
+            setTimeout(checkGoogleTranslateBanner, 2000);
+
+            // Mobile menu functionality
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-
             if (mobileMenuButton && mobileMenu) {
                 mobileMenuButton.addEventListener('click', () => {
                     mobileMenu.classList.toggle('hidden');
                 });
-
-                // Close mobile menu when clicking outside
                 document.addEventListener('click', (e) => {
                     if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
                         mobileMenu.classList.add('hidden');
@@ -346,7 +618,7 @@
             }
         });
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit2"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('scripts')
 </body>
