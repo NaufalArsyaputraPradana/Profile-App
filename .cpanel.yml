@@ -1,0 +1,55 @@
+---
+deployment:
+  tasks:
+    # Set deployment path
+    - export DEPLOYPATH=/home/knqhqyca/public_html/
+    
+    # Copy folder Laravel yang WAJIB
+    - /bin/cp -R app $DEPLOYPATH
+    - /bin/cp -R bootstrap $DEPLOYPATH
+    - /bin/cp -R config $DEPLOYPATH
+    - /bin/cp -R public $DEPLOYPATH
+    - /bin/cp -R resources $DEPLOYPATH
+    - /bin/cp -R routes $DEPLOYPATH
+    
+    # Copy storage folder (dengan hati-hati - jangan timpa data yang sudah ada)
+    - /bin/cp -R storage/app $DEPLOYPATH/storage/ 2>/dev/null || true
+    - /bin/cp -R storage/framework $DEPLOYPATH/storage/ 2>/dev/null || true
+    
+    # Copy file konfigurasi penting
+    - /bin/cp .env.example $DEPLOYPATH
+    - /bin/cp artisan $DEPLOYPATH
+    - /bin/cp composer.json $DEPLOYPATH
+    - /bin/cp composer.lock $DEPLOYPATH
+    
+    # SKIP: database migrations (biasanya dijalankan manual)
+    # SKIP: vendor (akan di-install via composer)
+    # SKIP: node_modules (tidak perlu di production)
+    
+    # Copy .htaccess jika ada di root
+    - /bin/cp .htaccess $DEPLOYPATH 2>/dev/null || true
+    
+    # Set permission yang diperlukan Laravel
+    - /bin/chmod -R 755 $DEPLOYPATH/storage 2>/dev/null || true
+    - /bin/chmod -R 755 $DEPLOYPATH/bootstrap/cache 2>/dev/null || true
+    
+    # Install composer dependencies (PENTING untuk Laravel)
+    - cd $DEPLOYPATH && composer install --no-dev --optimize-autoloader 2>/dev/null || echo "Composer not available - install dependencies manually"
+    
+    # Setup .env file jika belum ada
+    - cd $DEPLOYPATH && [ ! -f .env ] && cp .env.example .env
+    
+    # Generate app key jika belum ada (.env harus sudah ada)
+    - cd $DEPLOYPATH && php artisan key:generate --force 2>/dev/null || echo "Please set APP_KEY manually"
+    
+    # Build frontend assets jika diperlukan
+    - cd $DEPLOYPATH && npm install 2>/dev/null || echo "NPM not available"
+    - cd $DEPLOYPATH && npm run build 2>/dev/null || echo "Build assets manually if needed"
+    
+    # Laravel optimizations
+    - cd $DEPLOYPATH && php artisan config:cache 2>/dev/null || true
+    - cd $DEPLOYPATH && php artisan route:cache 2>/dev/null || true
+    - cd $DEPLOYPATH && php artisan view:cache 2>/dev/null || true
+    
+    # Create storage symlink
+    - cd $DEPLOYPATH && php artisan storage:link 2>/dev/null || true
