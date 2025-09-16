@@ -45,3 +45,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         'contact' => ContactSectionController::class,
     ]);
 });
+
+Route::get('/foo', function () {
+   Artisan::call('storage:link');
+});
