@@ -1,81 +1,59 @@
 @extends('layouts.admin')
-
-@section('title', 'Kelola Hero Sections')
+@section('title', 'Hero Section')
+@section('page-title', 'Pengaturan Hero Section')
+@section('breadcrumb')<span class="text-slate-300">Hero Section</span>@endsection
 
 @section('content')
-<div class="bg-white rounded-lg shadow-lg p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-semibold">Daftar Hero Section</h2>
-        <a href="{{ route('admin.hero.create') }}" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
-            Tambah Hero Section
-        </a>
+<div class="max-w-3xl">
+    <div class="alert-success mb-6 bg-blue-500/10 border border-blue-500/20 text-blue-400">
+        <i class="fas fa-info-circle mr-2"></i> Hero section adalah bagian pertama yang dilihat pengunjung saat membuka website Anda.
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full table-auto">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Background</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtitle</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Button</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($heroes as $hero)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        @if($hero->background_image)
-                            <img src="{{ Storage::url($hero->background_image) }}" alt="Background" class="w-16 h-10 object-cover rounded">
-                        @else
-                            <div class="w-16 h-10 bg-gray-300 rounded flex items-center justify-center">
-                                <i class="fas fa-image text-gray-500"></i>
-                            </div>
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">{{ Str::limit($hero->title, 30) }}</div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm text-gray-600">{{ Str::limit($hero->subtitle, 50) }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-600">{{ $hero->button_text }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {{ $hero->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                            {{ $hero->is_active ? 'Aktif' : 'Tidak Aktif' }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href="{{ route('admin.hero.edit', $hero) }}" class="text-blue-600 hover:text-blue-900 mr-3">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <form action="{{ route('admin.hero.destroy', $hero) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus hero section ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-    @if($heroes->isEmpty())
-        <div class="text-center py-12">
-            <i class="fas fa-star text-6xl text-gray-300 mb-4"></i>
-            <p class="text-gray-500 text-lg">Belum ada hero section yang dibuat</p>
-            <a href="{{ route('admin.hero.create') }}" class="mt-4 inline-block bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">
-                Buat Hero Section Pertama
-            </a>
+    <form method="POST" action="{{ route('admin.hero.update') }}" enctype="multipart/form-data" class="space-y-6">
+        @csrf @method('PUT')
+        <div class="card p-6 space-y-5">
+            <h3 class="text-white font-semibold border-b border-white/5 pb-3">Teks Utama</h3>
+            <div>
+                <label class="block mb-2">Salam / Sapaan (Greeting)</label>
+                <input type="text" name="greeting" value="{{ old('greeting', $hero->greeting ?? 'Halo, Saya') }}" placeholder="e.g. Halo, Saya">
+            </div>
+            <div>
+                <label class="block mb-2">Nama Utama (Headline)</label>
+                <input type="text" name="headline" value="{{ old('headline', $hero->headline ?? '') }}" required placeholder="e.g. Naufal Arsyaputra Pradana">
+            </div>
+            <div>
+                <label class="block mb-2">Sub-headline / Peran <span class="text-slate-500 text-xs">(Gunakan koma untuk animasi typing, misal: Full Stack Developer, UI/UX Designer)</span></label>
+                <input type="text" name="subheadline" value="{{ old('subheadline', $hero->subheadline ?? '') }}" placeholder="e.g. Full Stack Web Developer, Software Architect">
+            </div>
+            <div>
+                <label class="block mb-2">Deskripsi Singkat</label>
+                <textarea name="description" rows="3" placeholder="Deskripsi singkat yang muncul di bawah peran...">{{ old('description', $hero->description ?? '') }}</textarea>
+            </div>
         </div>
-    @endif
+
+        <div class="card p-6 space-y-5">
+            <h3 class="text-white font-semibold border-b border-white/5 pb-3">Media (Opsional)</h3>
+            <div>
+                <label class="block mb-2">Gambar / Avatar Hero</label>
+                @if(isset($hero) && $hero->image)
+                <div class="mb-3">
+                    <img src="{{ Storage::url($hero->image) }}" alt="Hero Image" class="max-h-40 rounded-xl border border-white/10">
+                </div>
+                @endif
+                <input type="file" name="image" accept="image/*">
+            </div>
+            
+            <div class="flex items-center gap-2 mt-6">
+                <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $hero->is_active ?? true) ? 'checked' : '' }}>
+                <label for="is_active" class="cursor-pointer">Aktifkan Section Ini</label>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+        </div>
+    </form>
 </div>
 @endsection

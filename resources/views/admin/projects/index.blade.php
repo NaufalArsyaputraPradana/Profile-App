@@ -1,68 +1,91 @@
 @extends('layouts.admin')
-
-@section('title', 'Kelola Projects')
+@section('title', 'Portfolio / Proyek')
+@section('page-title', 'Daftar Proyek')
+@section('breadcrumb')<span class="text-slate-300">Proyek</span>@endsection
 
 @section('content')
-<div class="bg-white rounded-lg shadow-lg p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-semibold">Daftar Project</h2>
-        <a href="{{ route('admin.projects.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-            Tambah Project
-        </a>
+<div class="flex items-center justify-between mb-6">
+    <div class="flex gap-3">
+        <input type="text" placeholder="Cari proyek..." id="search-input" class="w-64 text-sm">
     </div>
-
-    <div class="overflow-x-auto">
-        <table class="w-full table-auto">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Technologies</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($projects as $project)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        @if($project->image)
-                            <img src="{{ Storage::url($project->image) }}" alt="{{ $project->title }}" class="w-16 h-16 object-cover rounded">
-                        @else
-                            <div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
-                                <i class="fas fa-image text-gray-400"></i>
-                            </div>
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">{{ $project->title }}</div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex flex-wrap gap-2">
-                            @foreach($project->technologies as $tech)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{{ $tech }}</span>
-                            @endforeach
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href="{{ route('admin.projects.edit', $project) }}" class="text-blue-600 hover:text-blue-900 mr-3">
-                            Edit
-                        </a>
-                        <form action="{{ route('admin.projects.destroy', $project) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Apakah Anda yakin ingin menghapus project ini?')">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-    <div class="mt-4">
-        {{ $projects->links() }}
-    </div>
+    <a href="{{ route('admin.projects.create') }}" class="btn-primary">
+        <i class="fas fa-plus text-xs"></i> Tambah Proyek
+    </a>
 </div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Urutan</th>
+                <th>Thumbnail</th>
+                <th>Judul Proyek</th>
+                <th>Kategori</th>
+                <th>Tahun</th>
+                <th>Status</th>
+                <th class="text-right">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($projects as $project)
+            <tr>
+                <td class="text-slate-500 text-center w-16">{{ $project->sort_order }}</td>
+                <td class="w-24">
+                    @if($project->thumbnail)
+                    <div class="w-16 h-10 rounded overflow-hidden bg-white/5 border border-white/10">
+                        <img src="{{ Storage::url($project->thumbnail) }}" class="w-full h-full object-cover">
+                    </div>
+                    @else
+                    <div class="w-16 h-10 rounded bg-white/5 border border-white/10 flex items-center justify-center text-slate-500 text-xs">No Img</div>
+                    @endif
+                </td>
+                <td>
+                    <div class="font-medium text-white">{{ Str::limit($project->title, 40) }}</div>
+                </td>
+                <td><span class="text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400">{{ $project->category }}</span></td>
+                <td class="text-slate-400 text-xs">{{ $project->year ?? '-' }}</td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs px-2 py-0.5 rounded-full {{ $project->status === 'active' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400' }}">
+                            {{ ucfirst($project->status) }}
+                        </span>
+                        @if($project->featured)
+                        <i class="fas fa-star text-yellow-500 text-xs"></i>
+                        @endif
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="flex items-center justify-end gap-2">
+                        <a href="{{ route('admin.projects.edit', $project) }}" class="text-slate-400 hover:text-blue-400 text-sm p-1"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{ route('admin.projects.destroy', $project) }}" class="inline">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="text-slate-400 hover:text-red-400 text-sm p-1" onclick="return confirm('Hapus proyek ini?')"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="7" class="text-center py-12 text-slate-500">
+                    <i class="fas fa-folder-open text-4xl opacity-20 mb-3 block"></i>
+                    Belum ada data proyek.
+                </td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-4">{{ $projects->links() }}</div>
 @endsection
+
+@push('scripts')
+<script>
+document.getElementById('search-input')?.addEventListener('input', function() {
+    const val = this.value.toLowerCase();
+    document.querySelectorAll('tbody tr').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
+    });
+});
+</script>
+@endpush

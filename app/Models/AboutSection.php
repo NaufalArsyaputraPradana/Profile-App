@@ -17,7 +17,8 @@ class AboutSection extends Model
         'email',
         'phone',
         'address',
-        'cv_file',
+        'cv_kreatif',
+        'cv_ats',
         'is_active'
     ];
 

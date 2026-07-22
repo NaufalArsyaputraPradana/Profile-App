@@ -30,7 +30,8 @@ class AboutSectionController extends Controller
             'email' => 'required|email',
             'phone' => 'nullable|max:255',
             'address' => 'required|max:255',
-            'cv_file' => 'nullable|mimes:pdf|max:5120',
+            'cv_kreatif' => 'nullable|mimes:pdf|max:5120',
+            'cv_ats' => 'nullable|mimes:pdf|max:5120',
             'is_active' => 'boolean'
         ]);
 
@@ -39,9 +40,14 @@ class AboutSectionController extends Controller
             $validated['photo'] = $path;
         }
 
-        if ($request->hasFile('cv_file')) {
-            $path = $request->file('cv_file')->store('cv', 'public');
-            $validated['cv_file'] = $path;
+        if ($request->hasFile('cv_kreatif')) {
+            $path = $request->file('cv_kreatif')->store('cv', 'public');
+            $validated['cv_kreatif'] = $path;
+        }
+        
+        if ($request->hasFile('cv_ats')) {
+            $path = $request->file('cv_ats')->store('cv', 'public');
+            $validated['cv_ats'] = $path;
         }
 
         if ($validated['is_active']) {
@@ -69,7 +75,8 @@ class AboutSectionController extends Controller
             'email' => 'required|email',
             'phone' => 'nullable|max:255',
             'address' => 'required|max:255',
-            'cv_file' => 'nullable|mimes:pdf|max:5120',
+            'cv_kreatif' => 'nullable|mimes:pdf|max:5120',
+            'cv_ats' => 'nullable|mimes:pdf|max:5120',
             'is_active' => 'boolean'
         ]);
 
@@ -81,12 +88,20 @@ class AboutSectionController extends Controller
             $validated['photo'] = $path;
         }
 
-        if ($request->hasFile('cv_file')) {
-            if ($about->cv_file) {
-                Storage::disk('public')->delete($about->cv_file);
+        if ($request->hasFile('cv_kreatif')) {
+            if ($about->cv_kreatif) {
+                Storage::disk('public')->delete($about->cv_kreatif);
             }
-            $path = $request->file('cv_file')->store('cv', 'public');
-            $validated['cv_file'] = $path;
+            $path = $request->file('cv_kreatif')->store('cv', 'public');
+            $validated['cv_kreatif'] = $path;
+        }
+
+        if ($request->hasFile('cv_ats')) {
+            if ($about->cv_ats) {
+                Storage::disk('public')->delete($about->cv_ats);
+            }
+            $path = $request->file('cv_ats')->store('cv', 'public');
+            $validated['cv_ats'] = $path;
         }
 
         if ($validated['is_active']) {
@@ -106,8 +121,11 @@ class AboutSectionController extends Controller
         if ($about->photo) {
             Storage::disk('public')->delete($about->photo);
         }
-        if ($about->cv_file) {
-            Storage::disk('public')->delete($about->cv_file);
+        if ($about->cv_kreatif) {
+            Storage::disk('public')->delete($about->cv_kreatif);
+        }
+        if ($about->cv_ats) {
+            Storage::disk('public')->delete($about->cv_ats);
         }
         
         $about->delete();

@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone')->nullable();
             $table->string('address');
-            $table->string('cv_file')->nullable();
+            $table->string('cv_kreatif')->nullable();
+            $table->string('cv_ats')->nullable();
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });

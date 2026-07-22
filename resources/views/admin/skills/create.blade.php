@@ -1,67 +1,68 @@
 @extends('layouts.admin')
-
-@section('title', 'Tambah Skill')
+@section('title', 'Tambah Keahlian')
+@section('page-title', 'Tambah Keahlian Baru')
+@section('breadcrumb')
+<a href="{{ route('admin.skills.index') }}" class="hover:text-slate-300">Skills</a>
+<span class="mx-1">›</span><span class="text-slate-300">Tambah</span>
+@endsection
 
 @section('content')
-<div class="bg-white rounded-lg shadow-lg p-6">
-    <form action="{{ route('admin.skills.store') }}" method="POST">
+<div class="max-w-2xl">
+    <form method="POST" action="{{ route('admin.skills.store') }}" class="space-y-6">
         @csrf
-        <div class="space-y-6">
-            <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">Nama Skill</label>
-                <input type="text" name="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" value="{{ old('name') }}" required>
-                @error('name')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
-                <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
-                <select name="category" id="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                    <option value="">Pilih Kategori</option>
-                    <option value="frontend" {{ old('category') === 'frontend' ? 'selected' : '' }}>Frontend</option>
-                    <option value="backend" {{ old('category') === 'backend' ? 'selected' : '' }}>Backend</option>
-                    <option value="design" {{ old('category') === 'design' ? 'selected' : '' }}>Design</option>
-                </select>
-                @error('category')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
-                <label for="percentage" class="block text-sm font-medium text-gray-700">Persentase</label>
-                <div class="mt-1 flex items-center gap-4">
-                    <input type="range" name="percentage" id="percentage" min="0" max="100" class="w-full" value="{{ old('percentage', 50) }}" oninput="updatePercentageValue(this.value)">
-                    <span id="percentageValue" class="text-sm text-gray-600">50%</span>
+        <div class="card p-6 space-y-5">
+            <h3 class="text-white font-semibold border-b border-white/5 pb-3">Informasi Skill</h3>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block mb-2">Nama Skill *</label>
+                    <input type="text" name="name" value="{{ old('name') }}" required placeholder="e.g. Laravel, React, Figma">
                 </div>
-                @error('percentage')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                <div>
+                    <label class="block mb-2">Kategori *</label>
+                    <select name="category" required>
+                        <option value="frontend" {{ old('category') === 'frontend' ? 'selected' : '' }}>Frontend</option>
+                        <option value="backend" {{ old('category') === 'backend' ? 'selected' : '' }}>Backend</option>
+                        <option value="design" {{ old('category') === 'design' ? 'selected' : '' }}>Design / UI/UX</option>
+                        <option value="tools" {{ old('category') === 'tools' ? 'selected' : '' }}>Tools & DevOps</option>
+                        <option value="soft" {{ old('category') === 'soft' ? 'selected' : '' }}>Soft Skills</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div>
+                <label class="block mb-2 flex justify-between">
+                    <span>Tingkat Kemahiran (Percentage) *</span>
+                    <span id="prof-val" class="text-blue-400 font-bold">{{ old('percentage', 80) }}%</span>
+                </label>
+                <input type="range" name="percentage" min="0" max="100" step="5" value="{{ old('percentage', 80) }}" 
+                       class="w-full accent-blue-500" id="prof-slider">
             </div>
 
             <div>
-                <label for="icon" class="block text-sm font-medium text-gray-700">Icon (Font Awesome Class)</label>
-                <input type="text" name="icon" id="icon" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" value="{{ old('icon') }}" placeholder="fas fa-code">
-                <p class="mt-1 text-sm text-gray-500">Contoh: fas fa-code, fab fa-react, dll.</p>
-                @error('icon')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                <label class="block mb-2">Icon (FontAwesome Class) <span class="text-slate-500 text-xs">Atau nama file gambar di public/assets/icons</span></label>
+                <input type="text" name="icon" value="{{ old('icon') }}" placeholder="e.g. fab fa-laravel">
+                <p class="text-xs text-slate-500 mt-2">
+                    Referensi FontAwesome: <a href="https://fontawesome.com/search?o=r&m=free" target="_blank" class="text-blue-400">fontawesome.com</a>
+                </p>
             </div>
+        </div>
 
-            <div class="flex justify-end">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                    Simpan Skill
-                </button>
-            </div>
+        <div class="flex gap-3">
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Simpan Skill
+            </button>
+            <a href="{{ route('admin.skills.index') }}" class="btn-outline">
+                <i class="fas fa-times"></i> Batal
+            </a>
         </div>
     </form>
 </div>
+@endsection
 
 @push('scripts')
 <script>
-function updatePercentageValue(value) {
-    document.getElementById('percentageValue').textContent = value + '%';
-}
+document.getElementById('prof-slider')?.addEventListener('input', function() {
+    document.getElementById('prof-val').textContent = this.value + '%';
+});
 </script>
 @endpush
-@endsection

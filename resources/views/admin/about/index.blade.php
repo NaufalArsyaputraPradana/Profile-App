@@ -1,81 +1,83 @@
 @extends('layouts.admin')
-
-@section('title', 'Kelola About Sections')
+@section('title', 'About Section')
+@section('page-title', 'Pengaturan About Section')
+@section('breadcrumb')<span class="text-slate-300">About Section</span>@endsection
 
 @section('content')
-<div class="bg-white rounded-lg shadow-lg p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-semibold">Daftar About Section</h2>
-        <a href="{{ route('admin.about.create') }}" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600">
-            Tambah About Section
-        </a>
-    </div>
-
-    <div class="overflow-x-auto">
-        <table class="w-full table-auto">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Photo</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($abouts as $about)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        @if($about->photo)
-                            <img src="{{ Storage::url($about->photo) }}" alt="{{ $about->name }}" class="w-12 h-12 object-cover rounded-full">
-                        @else
-                            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-gray-500"></i>
-                            </div>
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">{{ $about->name }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-600">{{ $about->email }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-600">{{ $about->age }} tahun</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {{ $about->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                            {{ $about->is_active ? 'Aktif' : 'Tidak Aktif' }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href="{{ route('admin.about.edit', $about) }}" class="text-blue-600 hover:text-blue-900 mr-3">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <form action="{{ route('admin.about.destroy', $about) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus about section ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-    @if($abouts->isEmpty())
-        <div class="text-center py-12">
-            <i class="fas fa-user text-6xl text-gray-300 mb-4"></i>
-            <p class="text-gray-500 text-lg">Belum ada about section yang dibuat</p>
-            <a href="{{ route('admin.about.create') }}" class="mt-4 inline-block bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600">
-                Buat About Section Pertama
-            </a>
+<div class="max-w-3xl">
+    <form method="POST" action="{{ route('admin.about.update') }}" enctype="multipart/form-data" class="space-y-6">
+        @csrf @method('PUT')
+        
+        <div class="card p-6 space-y-5">
+            <h3 class="text-white font-semibold border-b border-white/5 pb-3">Profil Utama</h3>
+            <div>
+                <label class="block mb-2">Judul Bagian</label>
+                <input type="text" name="title" value="{{ old('title', $about->title ?? 'Membangun solusi digital dengan kode dan kreativitas.') }}" required>
+            </div>
+            <div>
+                <label class="block mb-2">Deskripsi Diri</label>
+                <textarea name="description" rows="5" required>{{ old('description', $about->description ?? '') }}</textarea>
+            </div>
+            <div>
+                <label class="block mb-2">Foto Profil (About)</label>
+                @if(isset($about) && $about->profile_image)
+                <div class="mb-3">
+                    <img src="{{ Storage::url($about->profile_image) }}" class="max-h-40 rounded-xl border border-white/10">
+                </div>
+                @endif
+                <input type="file" name="profile_image" accept="image/*">
+            </div>
         </div>
-    @endif
+
+        <div class="card p-6 space-y-5">
+            <h3 class="text-white font-semibold border-b border-white/5 pb-3">Visi & Misi</h3>
+            <div>
+                <label class="block mb-2">Visi</label>
+                <textarea name="vision" rows="3">{{ old('vision', $about->vision ?? '') }}</textarea>
+            </div>
+            <div>
+                <label class="block mb-2">Misi</label>
+                <textarea name="mission" rows="3">{{ old('mission', $about->mission ?? '') }}</textarea>
+            </div>
+        </div>
+
+        <div class="card p-6 space-y-5">
+            <h3 class="text-white font-semibold border-b border-white/5 pb-3">Berkas CV/Resume</h3>
+            <div>
+                <label class="block mb-2">File CV Kreatif (PDF)</label>
+                @if(isset($about) && $about->cv_kreatif)
+                <div class="mb-3">
+                    <a href="{{ Storage::url($about->cv_kreatif) }}" target="_blank" class="text-blue-400 text-sm flex items-center gap-2">
+                        <i class="fas fa-file-pdf text-red-400"></i> Lihat CV Kreatif Saat Ini
+                    </a>
+                </div>
+                @endif
+                <input type="file" name="cv_kreatif" accept=".pdf">
+            </div>
+
+            <div>
+                <label class="block mb-2">File CV ATS (PDF)</label>
+                @if(isset($about) && $about->cv_ats)
+                <div class="mb-3">
+                    <a href="{{ Storage::url($about->cv_ats) }}" target="_blank" class="text-blue-400 text-sm flex items-center gap-2">
+                        <i class="fas fa-file-pdf text-red-400"></i> Lihat CV ATS Saat Ini
+                    </a>
+                </div>
+                @endif
+                <input type="file" name="cv_ats" accept=".pdf">
+            </div>
+
+            <div class="flex items-center gap-2 mt-6">
+                <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $about->is_active ?? true) ? 'checked' : '' }}>
+                <label for="is_active" class="cursor-pointer">Aktifkan Section Ini</label>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+        </div>
+    </form>
 </div>
 @endsection
