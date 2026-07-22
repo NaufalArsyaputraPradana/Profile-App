@@ -1,9 +1,14 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    
+    # Hapus ekstensi public dari URL (jika seseorang mengakses secara langsung)
+    RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC]
+    RewriteRule ^ %1 [NC,L,R=301]
 
-    # Prevent infinite loop by checking if a redirect already happened
-    RewriteCond %{ENV:REDIRECT_STATUS} ^$
-    RewriteRule ^(.*)$ public/$1 [L]
+    # Redirect semua request yang bukan file atau direktori asli ke dalam folder public/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^((?!public/).*)$ public/$1 [NC,L]
 </IfModule>
 
 # Security Headers
