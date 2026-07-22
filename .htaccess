@@ -1,9 +1,8 @@
-# Laravel .htaccess for shared hosting
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # If the requested file or directory doesn't exist...
-    RewriteCond %{REQUEST_URI} !^/public/
+    # Prevent infinite loop by checking if a redirect already happened
+    RewriteCond %{ENV:REDIRECT_STATUS} ^$
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 
