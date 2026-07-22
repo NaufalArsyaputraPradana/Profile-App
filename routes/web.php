@@ -22,37 +22,25 @@ use App\Http\Controllers\Admin\CertificateController;
 */
 
 // ==========================================
-// ARTISAN COMMANDS (development only)
+// Maintenance Routes
 // ==========================================
-Route::get('/artisan/migrate-fresh-seed', function () {
-    try {
-        Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
-        $output = Artisan::output();
-        Artisan::call('storage:link', ['--force' => true]);
-        return response('<pre style="background:#1e293b;color:#a3e635;padding:2rem;font-size:14px;min-height:100vh;">
-<strong style="font-size:18px;">✅ migrate:fresh --seed berhasil dijalankan!</strong>
+Route::get('/db-command', function (\Illuminate\Http\Request $request) {
+    $token = $request->query('token');
 
-' . htmlspecialchars($output) . '
-
-<strong>Storage Link:</strong> ✅ Done
-
-<a href="/" style="color:#60a5fa;">⬅ Kembali ke Homepage</a>
-</pre>');
-    } catch (\Exception $e) {
-        return response('<pre style="background:#1e293b;color:#f87171;padding:2rem;">
-<strong>❌ Error:</strong> ' . $e->getMessage() . '
-</pre>', 500);
+    // Hanya jalan jika aksesnya: domain.com/db-command?token=arsya123
+    if ($token !== 'arsya123') {
+        abort(403, 'Akses ditolak.');
     }
+
+    Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
+    return "Migrasi dan Seeding Selesai!";
 });
 
-Route::get('/artisan/storage-link', function () {
-    Artisan::call('storage:link', ['--force' => true]);
-    return 'Storage link created! <a href="/">Back to home</a>';
-});
-
-Route::get('/foo', function () {
-    Artisan::call('storage:link');
-    return 'Done!';
+Route::get('/clean-all', function () {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+    return "Semua cache berhasil dibersihkan!";
 });
 
 // ==========================================
