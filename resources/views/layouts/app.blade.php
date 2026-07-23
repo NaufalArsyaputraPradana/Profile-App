@@ -416,32 +416,56 @@
     <!-- Page Progress Bar -->
     <div class="page-transition" id="page-progress"></div>
 
-    <!-- Floating CV Button -->
-    @php
-        $aboutData = \App\Models\AboutSection::where('is_active', true)->first();
-    @endphp
-    @if($aboutData && ($aboutData->cv_kreatif || $aboutData->cv_ats))
-    <div class="fixed bottom-6 right-6 z-50 group">
-        <button class="w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg shadow-blue-500/30 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none">
-            <i class="fas fa-file-download text-xl"></i>
-        </button>
-        <div class="absolute bottom-16 right-0 mb-2 w-48 bg-[#111118] border border-white/10 rounded-xl shadow-xl opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 flex flex-col overflow-hidden">
-            <div class="px-4 py-2 bg-white/5 border-b border-white/5 text-xs text-slate-400 font-semibold uppercase tracking-wider">
-                Unduh CV Saya
+    <!-- Floating Action Buttons -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-4">
+        
+        <!-- CV Button -->
+        @php
+            $aboutData = \App\Models\AboutSection::where('is_active', true)->first();
+        @endphp
+        @if($aboutData && ($aboutData->cv_kreatif || $aboutData->cv_ats))
+        <div class="relative group">
+            <button class="w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg shadow-blue-500/30 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none">
+                <i class="fas fa-file-download text-xl"></i>
+            </button>
+            <div class="absolute right-16 bottom-0 mb-0 w-48 bg-[#111118] border border-white/10 rounded-xl shadow-xl opacity-0 invisible translate-x-4 group-hover:opacity-100 group-hover:visible group-hover:translate-x-0 transition-all duration-300 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 bg-white/5 border-b border-white/5 text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                    Unduh CV Saya
+                </div>
+                @if($aboutData->cv_kreatif)
+                <a href="{{ Storage::url($aboutData->cv_kreatif) }}" target="_blank" class="px-4 py-3 text-sm text-slate-300 hover:text-blue-400 hover:bg-white/5 transition-colors flex items-center gap-2">
+                    <i class="fas fa-file-alt text-blue-500"></i> CV Kreatif
+                </a>
+                @endif
+                @if($aboutData->cv_ats)
+                <a href="{{ Storage::url($aboutData->cv_ats) }}" target="_blank" class="px-4 py-3 text-sm text-slate-300 hover:text-green-400 hover:bg-white/5 transition-colors flex items-center gap-2">
+                    <i class="fas fa-file-invoice text-green-500"></i> CV ATS
+                </a>
+                @endif
             </div>
-            @if($aboutData->cv_kreatif)
-            <a href="{{ Storage::url($aboutData->cv_kreatif) }}" target="_blank" class="px-4 py-3 text-sm text-slate-300 hover:text-blue-400 hover:bg-white/5 transition-colors flex items-center gap-2">
-                <i class="fas fa-file-alt text-blue-500"></i> CV Kreatif
+        </div>
+        @endif
+
+        <!-- Email Button -->
+        <div class="relative group">
+            <a href="mailto:arsyapradana546@gmail.com" class="w-14 h-14 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-full shadow-lg shadow-red-500/30 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none">
+                <i class="fas fa-envelope text-xl"></i>
             </a>
-            @endif
-            @if($aboutData->cv_ats)
-            <a href="{{ Storage::url($aboutData->cv_ats) }}" target="_blank" class="px-4 py-3 text-sm text-slate-300 hover:text-green-400 hover:bg-white/5 transition-colors flex items-center gap-2">
-                <i class="fas fa-file-invoice text-green-500"></i> CV ATS
+            <div class="absolute right-16 top-1/2 -translate-y-1/2 px-3 py-2 bg-[#111118] border border-white/10 rounded-lg text-sm font-medium text-white opacity-0 invisible translate-x-4 group-hover:opacity-100 group-hover:visible group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap shadow-xl">
+                Kirim Email
+            </div>
+        </div>
+
+        <!-- WhatsApp Button -->
+        <div class="relative group">
+            <a href="https://wa.me/6282223199601" target="_blank" class="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full shadow-lg shadow-green-500/30 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none">
+                <i class="fab fa-whatsapp text-2xl"></i>
             </a>
-            @endif
+            <div class="absolute right-16 top-1/2 -translate-y-1/2 px-3 py-2 bg-[#111118] border border-white/10 rounded-lg text-sm font-medium text-white opacity-0 invisible translate-x-4 group-hover:opacity-100 group-hover:visible group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap shadow-xl">
+                Chat WhatsApp
+            </div>
         </div>
     </div>
-    @endif
 
     <!-- Promo Popup Ad -->
     <div id="promo-popup" class="fixed bottom-6 left-6 z-50 transform transition-all duration-700 translate-y-32 opacity-0 hidden sm:block w-80">
@@ -471,6 +495,36 @@
                 <a href="https://naufalarsyaputrapradana.github.io/other-project" target="_blank" class="block w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold text-center rounded-lg shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02]">
                     Lihat Proyek Lainnya
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Large Center Promo Popup -->
+    <div id="large-promo-popup" class="fixed inset-0 z-[100] flex items-center justify-center hidden opacity-0 transition-opacity duration-700 backdrop-blur-sm bg-black/60 p-4">
+        <div class="relative w-full max-w-2xl bg-[#0a0a0f] border border-blue-500/30 rounded-3xl p-8 md:p-12 shadow-2xl shadow-blue-900/50 overflow-hidden group transform scale-95 transition-transform duration-700" id="large-promo-content">
+            <!-- Glow background -->
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 opacity-50 blur-3xl"></div>
+            
+            <button onclick="closeLargePromo()" class="absolute top-4 right-4 text-slate-400 hover:text-white z-10 transition-colors w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div class="relative z-10 flex flex-col items-center text-center">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white mb-6 shadow-lg shadow-blue-500/40">
+                    <i class="fas fa-rocket text-4xl animate-bounce"></i>
+                </div>
+                
+                <h3 class="text-3xl md:text-4xl font-black text-white mb-4 tracking-tight">Tunggu Sebentar!</h3>
+                <p class="text-slate-300 text-sm md:text-base mb-8 max-w-md mx-auto leading-relaxed">
+                    Saya memiliki banyak proyek menarik lainnya yang mungkin bisa memberikan Anda inspirasi. Cek halaman karya saya selengkapnya!
+                </p>
+                
+                <a href="https://naufalarsyaputrapradana.github.io/other-project" target="_blank" onclick="closeLargePromo()" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-all hover:scale-105">
+                    <span>Lihat Proyek Lainnya</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+                <p class="text-slate-500 text-xs mt-6">Popup ini akan tertutup otomatis dalam <span id="promo-timer" class="font-bold text-blue-400">5</span> detik</p>
             </div>
         </div>
     </div>
@@ -828,6 +882,48 @@
             popup.classList.add('translate-y-32', 'opacity-0');
             setTimeout(() => popup.style.display = 'none', 700);
             localStorage.setItem('promo_closed', 'true');
+        }
+    }
+
+    // ===== LARGE PROMO POPUP =====
+    document.addEventListener('DOMContentLoaded', () => {
+        const largePopup = document.getElementById('large-promo-popup');
+        const largeContent = document.getElementById('large-promo-content');
+        const timerSpan = document.getElementById('promo-timer');
+        
+        // Use sessionStorage so it only shows once per visit (not every refresh, but every new tab/session)
+        if (largePopup && !sessionStorage.getItem('large_promo_closed')) {
+            setTimeout(() => {
+                largePopup.classList.remove('hidden');
+                // Trigger reflow for transition
+                void largePopup.offsetWidth;
+                largePopup.classList.remove('opacity-0');
+                largeContent.classList.remove('scale-95');
+                largeContent.classList.add('scale-100');
+
+                let timeLeft = 5;
+                const countdown = setInterval(() => {
+                    timeLeft--;
+                    if(timerSpan) timerSpan.innerText = Math.max(0, timeLeft);
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        closeLargePromo();
+                    }
+                }, 1000);
+            }, 1000); // Tampil setelah 1 detik
+        }
+    });
+
+    window.closeLargePromo = function() {
+        const largePopup = document.getElementById('large-promo-popup');
+        const largeContent = document.getElementById('large-promo-content');
+        if(largePopup) {
+            largePopup.classList.add('opacity-0');
+            largeContent.classList.remove('scale-100');
+            largeContent.classList.add('scale-95');
+            setTimeout(() => largePopup.style.display = 'none', 700);
+            sessionStorage.setItem('large_promo_closed', 'true');
         }
     }
 
