@@ -52,8 +52,6 @@ Route::get('/about', [PageController::class, 'about'])->name('about');
 // Portfolio / Projects
 Route::get('/portfolio', [PageController::class, 'projects'])->name('projects');
 Route::get('/portfolio/{project}', [PageController::class, 'projectDetail'])->name('projects.show');
-Route::get('/other-projects', [PageController::class, 'otherProjects'])->name('other-projects');
-
 // Skills
 Route::get('/skills', [PageController::class, 'skills'])->name('skills');
 

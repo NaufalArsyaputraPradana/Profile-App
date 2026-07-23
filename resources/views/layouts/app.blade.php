@@ -443,6 +443,38 @@
     </div>
     @endif
 
+    <!-- Promo Popup Ad -->
+    <div id="promo-popup" class="fixed bottom-6 left-6 z-50 transform transition-all duration-700 translate-y-32 opacity-0 hidden sm:block w-80">
+        <div class="relative bg-[#0f172a] border border-blue-500/30 rounded-2xl p-6 shadow-2xl shadow-blue-900/40 overflow-hidden group">
+            <!-- Glow background -->
+            <div class="absolute -inset-2 bg-gradient-to-r from-blue-600 to-purple-600 opacity-20 blur-xl group-hover:opacity-40 transition-opacity duration-500"></div>
+            
+            <button onclick="closePromo()" class="absolute top-3 right-3 text-slate-400 hover:text-white z-10 transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
+                        <i class="fas fa-rocket text-xl animate-bounce"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-sm">Explore More!</h4>
+                        <p class="text-xs text-blue-400">Karya Saya Lainnya</p>
+                    </div>
+                </div>
+                
+                <p class="text-slate-300 text-xs mb-4 leading-relaxed">
+                    Tertarik melihat eksperimen desain dan solusi inovatif dari karya saya yang lain?
+                </p>
+                
+                <a href="https://naufalarsyaputrapradana.github.io/other-project" target="_blank" class="block w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold text-center rounded-lg shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02]">
+                    Lihat Proyek Lainnya
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="fixed w-full z-50 transition-all duration-300" id="main-navbar">
         <div class="max-w-7xl mx-auto px-6">
@@ -778,6 +810,25 @@
         // Hide cursor elements on mobile
         document.getElementById('cursor-dot')?.remove();
         document.getElementById('cursor-outline')?.remove();
+    }
+
+    // ===== PROMO POPUP =====
+    document.addEventListener('DOMContentLoaded', () => {
+        const popup = document.getElementById('promo-popup');
+        if (popup && !localStorage.getItem('promo_closed')) {
+            setTimeout(() => {
+                popup.classList.remove('translate-y-32', 'opacity-0');
+            }, 2500); // Tampil setelah 2.5 detik
+        }
+    });
+
+    window.closePromo = function() {
+        const popup = document.getElementById('promo-popup');
+        if(popup) {
+            popup.classList.add('translate-y-32', 'opacity-0');
+            setTimeout(() => popup.style.display = 'none', 700);
+            localStorage.setItem('promo_closed', 'true');
+        }
     }
 
     // ===== LANGUAGE TOGGLE =====

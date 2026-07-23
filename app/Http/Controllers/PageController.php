@@ -60,14 +60,6 @@ class PageController extends Controller
         ]);
     }
 
-    public function otherProjects(): View
-    {
-        return view('pages.other-projects', [
-            'projects' => Project::where('status', 'active')->orderBy('sort_order')->take(6)->get(),
-            'contact' => $this->getContactData(),
-        ]);
-    }
-
     public function projectDetail(Project $project): View
     {
         $relatedProjects = Project::where('id', '!=', $project->id)
